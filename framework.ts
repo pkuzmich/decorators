@@ -4,16 +4,16 @@ const app: Application = express();
 const port = 3000;
 const pathForController = new Map<any, string>();
 
-export function Controller(urlPath: string) {
-  return function (target: any, context: any) {
+export function Controller<T, A extends any[], C extends abstract new (...args: A) => T>(urlPath: string) {
+  return function (target: C, context: ClassDecoratorContext<C>) {
     console.log(`@Controller ${context.name} is registered at ${urlPath}`);
     pathForController.set(target, urlPath);
     return target;
   };
 }
 
-export function Get(subPath: string) {
-  return function (target: any, context: any) {
+export function Get<T extends {}, R>(subPath: string) {
+  return function (target: (this: T) => R, context: ClassMethodDecoratorContext<T, (this: T) => R>) {
     console.log(`@Get - registering a GET handler for controller: ${target.constructor.name}`);
 
     context.addInitializer(function (this: any): void {

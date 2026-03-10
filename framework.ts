@@ -2,7 +2,31 @@ import express, { Application } from "express";
 
 const app: Application = express();
 const port = 3000;
+
 const pathForController = new Map<any, string>();
+const constructorForLabel = new Map<string, any>();
+
+export function Injectable(label: string) {
+  return function (target: any, context: any) {
+    console.log(`@Injectable: Registering an injectable type for label '${label}'`);
+    constructorForLabel.set(label, target);
+  };
+}
+
+export function Inject(name: string) {
+  return function (target: any, context: any) {
+    console.log(`@Inject - injecting a value for label '${name}'`);
+
+    return () => {
+      console.log("Init for the name: ", name);
+      const target = constructorForLabel.get(name);
+      if (!target) {
+        throw new Error(`No injectable type registered for label '${name}'`);
+      }
+      return new target();
+    };
+  };
+}
 
 export function Controller<T, A extends any[], C extends abstract new (...args: A) => T>(urlPath: string) {
   return function (target: C, context: ClassDecoratorContext<C>) {

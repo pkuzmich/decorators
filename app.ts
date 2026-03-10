@@ -1,5 +1,8 @@
 import { Controller, Get, Inject, Injectable, startApp } from "./framework";
 
+/**
+ * Injectable class for the CitiesDB
+ */
 @Injectable("CitiesDB")
 class CitiesDB {
   public getCities() {
@@ -8,6 +11,9 @@ class CitiesDB {
   }
 }
 
+/**
+ * Controller class for the WeatherController
+ */
 @Controller("/api")
 class WeatherController {
   @Get("/forecast")
@@ -21,6 +27,9 @@ class WeatherController {
   }
 }
 
+/**
+ * Controller class for the CitiesController
+ */
 @Controller("/api")
 class CitiesController {
   @Inject("CitiesDB")

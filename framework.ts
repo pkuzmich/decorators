@@ -6,6 +6,11 @@ const port = 3000;
 const pathForController = new Map<any, string>();
 const constructorForLabel = new Map<string, any>();
 
+/**
+ * Decorator for classes that are injectable
+ * @param label
+ * @returns
+ */
 export function Injectable(label: string) {
   return function (target: any, context: any) {
     console.log(`@Injectable: Registering an injectable type for label '${label}'`);
@@ -13,6 +18,11 @@ export function Injectable(label: string) {
   };
 }
 
+/**
+ * Decorator for methods that are injectable
+ * @param name
+ * @returns
+ */
 export function Inject(name: string) {
   return function (target: any, context: any) {
     console.log(`@Inject - injecting a value for label '${name}'`);
@@ -28,6 +38,11 @@ export function Inject(name: string) {
   };
 }
 
+/**
+ * Decorator for classes that are controllers
+ * @param urlPath
+ * @returns
+ */
 export function Controller<T, A extends any[], C extends abstract new (...args: A) => T>(urlPath: string) {
   return function (target: C, context: ClassDecoratorContext<C>) {
     console.log(`@Controller ${context.name} is registered at ${urlPath}`);
@@ -36,6 +51,11 @@ export function Controller<T, A extends any[], C extends abstract new (...args: 
   };
 }
 
+/**
+ * Decorator for methods that are GET endpoints
+ * @param subPath
+ * @returns
+ */
 export function Get<T extends {}, R>(subPath: string) {
   return function (target: (this: T) => R, context: ClassMethodDecoratorContext<T, (this: T) => R>) {
     console.log(`@Get - registering a GET handler for controller: ${target.constructor.name}`);
